@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Football AI{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .hero-section {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-lg);
+        text-align: center;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+        background: var(--gradient-1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--shadow-lg);
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient-1);
+    }
+
+    .stat-period {
+        font-size: 0.875rem;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1rem;
+    }
+
+    .stat-value {
+        font-size: 3rem;
+        font-weight: 700;
+        background: var(--gradient-1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        font-size: 1rem;
+        color: var(--dark);
+        margin-bottom: 1.5rem;
+    }
+
+    .stat-details {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .detail-item {
+        text-align: center;
+    }
+
+    .detail-value {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    .detail-label {
+        font-size: 0.75rem;
+        color: #9ca3af;
+        text-transform: uppercase;
+    }
+
+    .quick-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .quick-stat {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .btn {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: var(--primary);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: scale(1.05);
+    }
+
+    .btn-secondary {
+        background: white;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+        background: var(--primary);
+        color: white;
+    }
+
+    .info-banner {
+        background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 16px;
+        margin: 2rem 0;
+        text-align: center;
+    }
+
+    .league-overview {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin: 2rem 0;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .league-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .league-item {
+        text-align: center;
+        padding: 1rem;
+        border-radius: 8px;
+        background: var(--light);
+        transition: all 0.3s;
+    }
+
+    .league-item:hover {
+        background: var(--primary);
+        color: white;
+    }
+
+    .league-emoji {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <h1 class="hero-title">Football AI Prediction Dashboard</h1>
+    <p>Intelligente Fußballvorhersagen mit Machine Learning</p>
+    
+    <div class="quick-stats">
+        <div class="quick-stat">
+            <div class="stat-value">{{ upcoming_count }}</div>
+            <div class="stat-label">Anstehende Spiele</div>
+        </div>
+        <div class="quick-stat">
+            <div class="stat-value">{{ high_conf_count }}</div>
+            <div class="stat-label">High Confidence</div>
+        </div>
+        <div class="quick-stat">
+            <div class="stat-value">{{ stats.all_time.accuracy }}%</div>
+            <div class="stat-label">Gesamtgenauigkeit</div>
+        </div>
+    </div>
+    
+    <div class="action-buttons">
+        <a href="/predictions" class="btn btn-primary">Vorhersagen ansehen</a>
+        <a href="/results" class="btn btn-secondary">Ergebnisse prüfen</a>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <!-- All Time Stats -->
+    <div class="stat-card">
+        <div class="stat-period">Gesamt</div>
+        <div class="stat-value">{{ stats.all_time.accuracy }}%</div>
+        <div class="stat-label">Trefferquote</div>
+        <div class="stat-details">
+            <div class="detail-item">
+                <div class="detail-value">{{ stats.all_time.total_bets }}</div>
+                <div class="detail-label">Wetten</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-value">{{ stats.all_time.correct_bets }}</div>
+                <div class="detail-label">Richtig</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-value">{{ stats.all_time.roi }}%</div>
+                <div class="detail-label">ROI</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Last Month Stats -->
+    <div class="stat-card">
+        <div class="stat-period">Letzter Monat</div>
+        <div class="stat-value">{{ stats.last_month.accuracy }}%</div>
+        <div class="stat-label">Trefferquote</div>
+        <div class="stat-details">
+            <div class="detail-item">
+                <div class="detail-value">{{ stats.last_month.total_bets }}</div>
+                <div class="detail-label">Wetten</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-value">{{ stats.last_month.correct_bets }}</div>
+                <div class="detail-label">Richtig</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-value">{{ stats.last_month.roi }}%</div>
+                <div class="detail-label">ROI</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Last Week Stats -->
+    <div class="stat-card">
+        <div class="stat-period">Letzte Woche</div>
+        <div class="stat-value">{{ stats.last_week.accuracy }}%</div>
+        <div class="stat-label">Trefferquote</div>
+        <div class="stat-details">
+            <div class="detail-item">
+                <div class="detail-value">{{ stats.last_week.total_bets }}</div>
+                <div class="detail-label">Wetten</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-value">{{ stats.last_week.correct_bets }}</div>
+                <div class="detail-label">Richtig</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-value">{{ stats.last_week.roi }}%</div>
+                <div class="detail-label">ROI</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="info-banner">
+    <h2>🎯 Bester Markt: {{ stats.all_time.best_market }}</h2>
+    <p>Fokussieren Sie sich auf High Confidence Vorhersagen für beste Ergebnisse!</p>
+</div>
+
+<div class="league-overview">
+    <h2>Unterstützte Ligen</h2>
+    <div class="league-grid">
+        {% for code, league in leagues.items() %}
+        <div class="league-item">
+            <div class="league-emoji">{{ league.emoji }}</div>
+            <div>{{ league.name }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

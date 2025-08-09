@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}Info - Football AI{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .about-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .info-title {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+        color: var(--primary);
+    }
+
+    .faq-item {
+        margin-bottom: 1.5rem;
+        padding: 1.5rem;
+        background: var(--light);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .faq-item:hover {
+        background: white;
+        box-shadow: var(--shadow);
+    }
+
+    .faq-question {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-answer {
+        color: #6b7280;
+        line-height: 1.6;
+        display: none;
+    }
+
+    .faq-item.active .faq-answer {
+        display: block;
+    }
+
+    .tech-stack {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .tech-item {
+        padding: 1rem;
+        background: var(--light);
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .feature-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .feature-list li {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+    }
+
+    .feature-list li:before {
+        content: "✓";
+        color: var(--secondary);
+        font-weight: bold;
+        margin-right: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="about-container">
+    <div class="info-card">
+        <h1 class="info-title">Über Football AI Predictions</h1>
+        <p>
+            Unsere KI-gestützte Plattform nutzt fortschrittliche Machine Learning Algorithmen,
+            um präzise Fußballvorhersagen zu generieren. Mit einer Kombination aus historischen
+            Daten, Teamstatistiken und intelligenten Modellen erreichen wir eine hohe Trefferquote.
+        </p>
+    </div>
+
+    <div class="info-card">
+        <h2 class="info-title">Funktionen</h2>
+        <ul class="feature-list">
+            <li>Automatische Vorhersagegenerierung zweimal wöchentlich</li>
+            <li>Ensemble Learning mit Random Forest und Gradient Boosting</li>
+            <li>Confidence-Scoring für jede Vorhersage</li>
+            <li>Historische Performance-Analyse</li>
+            <li>ROI-Berechnung und Statistiken</li>
+            <li>Fokus auf Top 5 europäische Ligen</li>
+        </ul>
+    </div>
+
+    <div class="info-card">
+        <h2 class="info-title">Technologie</h2>
+        <div class="tech-stack">
+            <div class="tech-item">Python</div>
+            <div class="tech-item">Flask</div>
+            <div class="tech-item">Scikit-learn</div>
+            <div class="tech-item">Pandas</div>
+            <div class="tech-item">Railway</div>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <h2 class="info-title">Häufige Fragen</h2>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                Wie genau sind die Vorhersagen?
+                <span>+</span>
+            </div>
+            <div class="faq-answer">
+                Unsere Modelle erreichen eine durchschnittliche Genauigkeit von 65-70%.
+                High Confidence Vorhersagen haben eine noch höhere Trefferquote.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                Wann werden neue Vorhersagen generiert?
+                <span>+</span>
+            </div>
+            <div class="faq-answer">
+                Neue Vorhersagen werden automatisch jeden Dienstag um 14:00 Uhr
+                und jeden Freitag um 18:00 Uhr generiert.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                Welche Daten werden verwendet?
+                <span>+</span>
+            </div>
+            <div class="faq-answer">
+                Wir nutzen historische Spielergebnisse, Teamstatistiken, Form-Daten,
+                Head-to-Head Aufzeichnungen und aktuelle Quoten zur Vorhersage.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                Kann ich die Vorhersagen für Wetten nutzen?
+                <span>+</span>
+            </div>
+            <div class="faq-answer">
+                Die Vorhersagen dienen nur zu Bildungszwecken. Keine Vorhersage ist garantiert.
+                Bitte wetten Sie verantwortungsvoll und nur mit Geld, dessen Verlust Sie sich leisten können.
+            </div>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <h2 class="info-title">Haftungsausschluss</h2>
+        <p style="color: var(--danger);">
+            <strong>Wichtig:</strong> Diese Plattform dient ausschließlich Bildungs- und Forschungszwecken.
+            Alle Vorhersagen sind statistische Schätzungen ohne Garantie. Glücksspiel kann süchtig machen.
+            Spielen Sie verantwortungsvoll.
+        </p>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+        item.addEventListener('click', function() {
+            this.classList.toggle('active');
+            const icon = this.querySelector('.faq-question span');
+            icon.textContent = this.classList.contains('active') ? '−' : '+';
+        });
+    });
+});
+</script>
+{% endblock %}
