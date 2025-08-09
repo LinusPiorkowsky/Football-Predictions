@@ -9,7 +9,17 @@
         border-radius: 16px;
         padding: 2rem;
         margin-bottom: 2rem;
-        box-shadow: var(--shadow-lg);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    }
+
+    .page-header h1 {
+        margin: 0 0 0.5rem 0;
+        color: #1f2937;
+    }
+
+    .page-header p {
+        margin: 0;
+        color: #6b7280;
     }
 
     .filters {
@@ -20,13 +30,14 @@
         background: white;
         border-radius: 12px;
         margin-bottom: 2rem;
-        box-shadow: var(--shadow);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12);
     }
 
     .filter-group {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
+        min-width: 200px;
     }
 
     .filter-label {
@@ -35,26 +46,29 @@
         color: #6b7280;
     }
 
-    .filter-select,
-    .filter-input {
+    select.filter-select {
         padding: 0.75rem 1rem;
-        border: 2px solid var(--border);
+        border: 2px solid #e5e7eb;
         border-radius: 8px;
         font-size: 1rem;
         background: white;
         transition: all 0.3s;
+        cursor: pointer;
     }
 
-    .filter-select:focus,
-    .filter-input:focus {
+    select.filter-select:hover {
+        border-color: #d1d5db;
+    }
+
+    select.filter-select:focus {
         outline: none;
-        border-color: var(--primary);
+        border-color: #3b82f6;
         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
 
-    .predictions-grid {
+    .predictions-container {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
         gap: 1.5rem;
     }
 
@@ -62,14 +76,14 @@
         background: white;
         border-radius: 16px;
         overflow: hidden;
-        box-shadow: var(--shadow);
-        transition: all 0.3s;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        transition: transform 0.3s, box-shadow 0.3s;
         position: relative;
     }
 
     .prediction-card:hover {
         transform: translateY(-5px);
-        box-shadow: var(--shadow-lg);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
     }
 
     .card-header {
@@ -81,14 +95,14 @@
         align-items: center;
     }
 
-    .league-badge {
+    .league-info {
         display: flex;
         align-items: center;
         gap: 0.5rem;
         font-weight: 600;
     }
 
-    .match-date {
+    .match-datetime {
         font-size: 0.875rem;
         opacity: 0.9;
     }
@@ -97,129 +111,184 @@
         padding: 1.5rem;
     }
 
-    .match-teams {
+    .teams-container {
         display: flex;
         align-items: center;
         justify-content: space-between;
         margin-bottom: 1.5rem;
-        font-size: 1.25rem;
-        font-weight: 600;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #f3f4f6;
     }
 
-    .home-team {
-        text-align: right;
+    .team-name {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #1f2937;
         flex: 1;
     }
 
-    .vs-separator {
-        margin: 0 1rem;
+    .team-home {
+        text-align: right;
+        padding-right: 1rem;
+    }
+
+    .team-away {
+        text-align: left;
+        padding-left: 1rem;
+    }
+
+    .vs-text {
         color: #9ca3af;
         font-size: 0.875rem;
+        font-weight: 500;
     }
 
-    .away-team {
-        text-align: left;
-        flex: 1;
-    }
-
-    .prediction-details {
-        background: var(--light);
+    .prediction-info {
+        background: #f9fafb;
         border-radius: 12px;
         padding: 1rem;
         margin-bottom: 1rem;
     }
 
-    .prediction-result {
+    .info-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 0.5rem;
+        padding: 0.5rem 0;
     }
 
-    .prediction-label {
+    .info-label {
         font-size: 0.875rem;
         color: #6b7280;
+        font-weight: 500;
     }
 
-    .prediction-value {
+    .info-value {
         font-weight: 600;
-        font-size: 1.125rem;
+        font-size: 1rem;
+        color: #1f2937;
     }
 
-    .confidence-bar {
-        width: 100%;
-        height: 8px;
-        background: var(--border);
-        border-radius: 4px;
-        overflow: hidden;
-        margin-top: 0.5rem;
+    .confidence-display {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 8px;
+        text-align: center;
     }
 
-    .confidence-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 100%);
-        transition: width 0.3s;
+    .confidence-high {
+        background: #d1fae5;
+        border: 2px solid #10b981;
     }
 
-    .confidence-badge {
+    .confidence-medium {
+        background: #fef3c7;
+        border: 2px solid #f59e0b;
+    }
+
+    .confidence-low {
+        background: #fee2e2;
+        border: 2px solid #ef4444;
+    }
+
+    .confidence-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
+
+    .confidence-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+    }
+
+    .high-conf-badge {
         position: absolute;
         top: 1rem;
         right: 1rem;
-        padding: 0.5rem 1rem;
+        background: #10b981;
+        color: white;
+        padding: 0.375rem 0.75rem;
         border-radius: 20px;
         font-size: 0.75rem;
         font-weight: 600;
         text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
-    .high-confidence {
-        background: var(--secondary);
-        color: white;
-    }
-
-    .low-confidence {
-        background: var(--warning);
-        color: white;
-    }
-
-    .odds-section {
+    .odds-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 0.5rem;
         margin-top: 1rem;
         padding-top: 1rem;
-        border-top: 1px solid var(--border);
+        border-top: 1px solid #e5e7eb;
     }
 
-    .odd-item {
+    .odds-item {
         text-align: center;
-        padding: 0.5rem;
-        background: var(--light);
+        padding: 0.75rem 0.5rem;
+        background: #f9fafb;
         border-radius: 8px;
+        transition: background 0.2s;
     }
 
-    .odd-label {
+    .odds-item:hover {
+        background: #f3f4f6;
+    }
+
+    .odds-label {
         font-size: 0.75rem;
         color: #6b7280;
         margin-bottom: 0.25rem;
+        font-weight: 500;
     }
 
-    .odd-value {
-        font-weight: 600;
-        color: var(--primary);
+    .odds-value {
+        font-weight: 700;
+        color: #3b82f6;
+        font-size: 1.125rem;
     }
 
-    .no-predictions {
+    .empty-state {
+        grid-column: 1 / -1;
         text-align: center;
         padding: 4rem 2rem;
         background: white;
         border-radius: 16px;
-        box-shadow: var(--shadow);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12);
     }
 
-    .no-predictions-icon {
+    .empty-icon {
         font-size: 4rem;
         margin-bottom: 1rem;
+    }
+
+    .empty-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-text {
+        color: #6b7280;
+    }
+
+    @media (max-width: 768px) {
+        .predictions-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .filters {
+            flex-direction: column;
+        }
+        
+        .filter-group {
+            width: 100%;
+        }
     }
 </style>
 {% endblock %}
@@ -232,129 +301,206 @@
 
 <div class="filters">
     <div class="filter-group">
-        <label class="filter-label">Liga</label>
+        <label class="filter-label" for="leagueFilter">Liga</label>
         <select class="filter-select" id="leagueFilter">
             <option value="">Alle Ligen</option>
-            {% for code, league in leagues.items() %}
-            <option value="{{ code }}" {% if filters.league == code %}selected{% endif %}>
-                {{ league.emoji }} {{ league.name }}
-            </option>
-            {% endfor %}
+            {% if leagues %}
+                {% for code, league in leagues.items() %}
+                <option value="{{ code }}">
+                    {{ league.emoji }} {{ league.name }}
+                </option>
+                {% endfor %}
+            {% endif %}
         </select>
     </div>
     
     <div class="filter-group">
-        <label class="filter-label">Confidence</label>
+        <label class="filter-label" for="confidenceFilter">Confidence</label>
         <select class="filter-select" id="confidenceFilter">
-            <option value="">Alle</option>
-            <option value="high" {% if filters.confidence == 'high' %}selected{% endif %}>Nur High Confidence</option>
+            <option value="">Alle Vorhersagen</option>
+            <option value="high">Nur High Confidence</option>
         </select>
     </div>
     
+    {% if dates %}
     <div class="filter-group">
-        <label class="filter-label">Datum</label>
+        <label class="filter-label" for="dateFilter">Datum</label>
         <select class="filter-select" id="dateFilter">
             <option value="">Alle Tage</option>
             {% for date in dates %}
-            <option value="{{ date }}" {% if filters.date == date %}selected{% endif %}>{{ date }}</option>
+            <option value="{{ date }}">{{ date }}</option>
             {% endfor %}
         </select>
     </div>
+    {% endif %}
 </div>
 
-<div class="predictions-grid">
+<div class="predictions-container">
     {% if predictions %}
         {% for pred in predictions %}
-        <div class="prediction-card" data-league="{{ pred.Div }}" data-confidence="{{ pred.High_conf }}">
-            {% if pred.High_conf == 1 %}
-            <div class="confidence-badge high-confidence">High Confidence</div>
+        <div class="prediction-card">
+            {% if pred.get('High_conf') == 1 %}
+            <div class="high-conf-badge">⭐ HIGH CONFIDENCE</div>
             {% endif %}
             
             <div class="card-header">
-                <div class="league-badge">
-                    <span>{{ leagues[pred.Div].emoji }}</span>
-                    <span>{{ leagues[pred.Div].name }}</span>
+                <div class="league-info">
+                    {% if pred.get('Div') and leagues and pred.get('Div') in leagues %}
+                        <span>{{ leagues[pred.get('Div')].emoji }}</span>
+                        <span>{{ leagues[pred.get('Div')].name }}</span>
+                    {% else %}
+                        <span>{{ pred.get('Div', 'Liga') }}</span>
+                    {% endif %}
                 </div>
-                <div class="match-date">
-                    {{ pred.Date.strftime('%d.%m.%Y') }} - {{ pred.Time }}
+                <div class="match-datetime">
+                    {{ pred.get('Date', 'TBD') }} • {{ pred.get('Time', '15:30') }}
                 </div>
             </div>
             
             <div class="card-body">
-                <div class="match-teams">
-                    <span class="home-team">{{ pred.HomeTeam }}</span>
-                    <span class="vs-separator">vs</span>
-                    <span class="away-team">{{ pred.AwayTeam }}</span>
+                <div class="teams-container">
+                    <div class="team-name team-home">
+                        {{ pred.get('HomeTeam', 'Heim') }}
+                    </div>
+                    <div class="vs-text">VS</div>
+                    <div class="team-name team-away">
+                        {{ pred.get('AwayTeam', 'Gast') }}
+                    </div>
                 </div>
                 
-                <div class="prediction-details">
-                    <div class="prediction-result">
-                        <span class="prediction-label">Vorhersage:</span>
-                        <span class="prediction-value">
-                            {% if pred.Prediction == 'H' %}
-                                {{ pred.HomeTeam }} (Heimsieg)
-                            {% elif pred.Prediction == 'D' %}
+                <div class="prediction-info">
+                    <div class="info-row">
+                        <span class="info-label">Vorhersage:</span>
+                        <span class="info-value">
+                            {% if pred.get('Prediction') == 'H' %}
+                                Heimsieg
+                            {% elif pred.get('Prediction') == 'D' %}
                                 Unentschieden
+                            {% elif pred.get('Prediction') == 'A' %}
+                                Auswärtssieg
                             {% else %}
-                                {{ pred.AwayTeam }} (Auswärtssieg)
+                                {{ pred.get('Prediction', 'N/A') }}
                             {% endif %}
                         </span>
                     </div>
-                    
-                    <div class="prediction-result">
-                        <span class="prediction-label">Confidence:</span>
-                        <span class="prediction-value">{{ (pred.Confidence * 100)|round(1) }}%</span>
-                    </div>
-                    
-                    <div class="confidence-bar">
-                        <div class="confidence-fill" style="width: {{ (pred.Confidence * 100)|round }}%"></div>
-                    </div>
                 </div>
                 
-                <div class="odds-section">
-                    <div class="odd-item">
-                        <div class="odd-label">Heim</div>
-                        <div class="odd-value">{{ pred.B365H }}</div>
+                {% if pred.get('Confidence') %}
+                    {% if pred.get('Confidence') > 0.65 %}
+                    <div class="confidence-display confidence-high">
+                        <div class="confidence-number" style="color: #065f46;">
+                            {{ (pred.get('Confidence') * 100)|int }}%
+                        </div>
+                        <div class="confidence-label" style="color: #065f46;">
+                            HOHE ZUVERSICHT
+                        </div>
                     </div>
-                    <div class="odd-item">
-                        <div class="odd-label">Unent.</div>
-                        <div class="odd-value">{{ pred.B365D }}</div>
+                    {% elif pred.get('Confidence') > 0.50 %}
+                    <div class="confidence-display confidence-medium">
+                        <div class="confidence-number" style="color: #92400e;">
+                            {{ (pred.get('Confidence') * 100)|int }}%
+                        </div>
+                        <div class="confidence-label" style="color: #92400e;">
+                            MITTLERE ZUVERSICHT
+                        </div>
                     </div>
-                    <div class="odd-item">
-                        <div class="odd-label">Ausw.</div>
-                        <div class="odd-value">{{ pred.B365A }}</div>
+                    {% else %}
+                    <div class="confidence-display confidence-low">
+                        <div class="confidence-number" style="color: #991b1b;">
+                            {{ (pred.get('Confidence') * 100)|int }}%
+                        </div>
+                        <div class="confidence-label" style="color: #991b1b;">
+                            NIEDRIGE ZUVERSICHT
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endif %}
+                
+                <div class="odds-grid">
+                    <div class="odds-item">
+                        <div class="odds-label">Heim</div>
+                        <div class="odds-value">
+                            {{ pred.get('B365H', 'N/A') }}
+                        </div>
+                    </div>
+                    <div class="odds-item">
+                        <div class="odds-label">Unent.</div>
+                        <div class="odds-value">
+                            {{ pred.get('B365D', 'N/A') }}
+                        </div>
+                    </div>
+                    <div class="odds-item">
+                        <div class="odds-label">Gast</div>
+                        <div class="odds-value">
+                            {{ pred.get('B365A', 'N/A') }}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     {% else %}
-        <div class="no-predictions">
-            <div class="no-predictions-icon">📊</div>
-            <h2>Keine Vorhersagen verfügbar</h2>
-            <p>Neue Vorhersagen werden bald generiert.</p>
+        <div class="empty-state">
+            <div class="empty-icon">📊</div>
+            <h2 class="empty-title">Keine Vorhersagen verfügbar</h2>
+            <p class="empty-text">Neue Vorhersagen werden bald generiert.</p>
+            <p class="empty-text" style="margin-top: 0.5rem;">
+                Nächste Updates: Dienstag 14:00 und Freitag 18:00
+            </p>
         </div>
     {% endif %}
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const leagueFilter = document.getElementById('leagueFilter');
-    const confidenceFilter = document.getElementById('confidenceFilter');
-    const dateFilter = document.getElementById('dateFilter');
+    // Get filter elements
+    var leagueFilter = document.getElementById('leagueFilter');
+    var confidenceFilter = document.getElementById('confidenceFilter');
+    var dateFilter = document.getElementById('dateFilter');
     
-    function applyFilters() {
-        const params = new URLSearchParams();
-        if (leagueFilter.value) params.set('league', leagueFilter.value);
-        if (confidenceFilter.value) params.set('confidence', confidenceFilter.value);
-        if (dateFilter.value) params.set('date', dateFilter.value);
-        
-        window.location.href = '/predictions?' + params.toString();
+    // Get current filters from URL
+    var urlParams = new URLSearchParams(window.location.search);
+    
+    // Set filter values from URL
+    if (leagueFilter && urlParams.get('league')) {
+        leagueFilter.value = urlParams.get('league');
+    }
+    if (confidenceFilter && urlParams.get('confidence')) {
+        confidenceFilter.value = urlParams.get('confidence');
+    }
+    if (dateFilter && urlParams.get('date')) {
+        dateFilter.value = urlParams.get('date');
     }
     
-    leagueFilter.addEventListener('change', applyFilters);
-    confidenceFilter.addEventListener('change', applyFilters);
-    dateFilter.addEventListener('change', applyFilters);
+    // Apply filters function
+    function applyFilters() {
+        var params = new URLSearchParams();
+        
+        if (leagueFilter && leagueFilter.value) {
+            params.set('league', leagueFilter.value);
+        }
+        if (confidenceFilter && confidenceFilter.value) {
+            params.set('confidence', confidenceFilter.value);
+        }
+        if (dateFilter && dateFilter.value) {
+            params.set('date', dateFilter.value);
+        }
+        
+        var queryString = params.toString();
+        var newUrl = '/predictions' + (queryString ? '?' + queryString : '');
+        window.location.href = newUrl;
+    }
+    
+    // Add event listeners if elements exist
+    if (leagueFilter) {
+        leagueFilter.addEventListener('change', applyFilters);
+    }
+    if (confidenceFilter) {
+        confidenceFilter.addEventListener('change', applyFilters);
+    }
+    if (dateFilter) {
+        dateFilter.addEventListener('change', applyFilters);
+    }
 });
 </script>
 {% endblock %}

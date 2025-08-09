@@ -1,3 +1,4 @@
+<!-- KORRIGIERTES TEMPLATE: templates/index.html -->
 {% extends "base.html" %}
 
 {% block title %}Dashboard - Football AI{% endblock %}
@@ -9,15 +10,16 @@
         border-radius: 20px;
         padding: 3rem;
         margin-bottom: 2rem;
-        box-shadow: var(--shadow-lg);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         text-align: center;
     }
 
     .hero-title {
         font-size: 2.5rem;
-        background: var(--gradient-1);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-clip: text;
         -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: transparent;
         margin-bottom: 1rem;
     }
 
@@ -32,7 +34,7 @@
         background: white;
         border-radius: 16px;
         padding: 2rem;
-        box-shadow: var(--shadow-lg);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         position: relative;
         overflow: hidden;
         transition: transform 0.3s;
@@ -49,7 +51,7 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: var(--gradient-1);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
 
     .stat-period {
@@ -63,15 +65,16 @@
     .stat-value {
         font-size: 3rem;
         font-weight: 700;
-        background: var(--gradient-1);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-clip: text;
         -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: transparent;
         margin-bottom: 0.5rem;
     }
 
     .stat-label {
         font-size: 1rem;
-        color: var(--dark);
+        color: #1f2937;
         margin-bottom: 1.5rem;
     }
 
@@ -79,7 +82,7 @@
         display: flex;
         justify-content: space-between;
         padding-top: 1rem;
-        border-top: 1px solid var(--border);
+        border-top: 1px solid #e5e7eb;
     }
 
     .detail-item {
@@ -89,7 +92,7 @@
     .detail-value {
         font-size: 1.25rem;
         font-weight: 600;
-        color: var(--primary);
+        color: #3b82f6;
     }
 
     .detail-label {
@@ -129,26 +132,27 @@
         cursor: pointer;
         transition: all 0.3s;
         text-decoration: none;
+        display: inline-block;
     }
 
     .btn-primary {
-        background: var(--primary);
+        background: #3b82f6;
         color: white;
     }
 
     .btn-primary:hover {
-        background: var(--primary-dark);
+        background: #2563eb;
         transform: scale(1.05);
     }
 
     .btn-secondary {
         background: white;
-        color: var(--primary);
-        border: 2px solid var(--primary);
+        color: #3b82f6;
+        border: 2px solid #3b82f6;
     }
 
     .btn-secondary:hover {
-        background: var(--primary);
+        background: #3b82f6;
         color: white;
     }
 
@@ -166,7 +170,7 @@
         border-radius: 16px;
         padding: 2rem;
         margin: 2rem 0;
-        box-shadow: var(--shadow-lg);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
 
     .league-grid {
@@ -180,12 +184,12 @@
         text-align: center;
         padding: 1rem;
         border-radius: 8px;
-        background: var(--light);
+        background: #f9fafb;
         transition: all 0.3s;
     }
 
     .league-item:hover {
-        background: var(--primary);
+        background: #3b82f6;
         color: white;
     }
 

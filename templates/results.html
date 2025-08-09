@@ -9,7 +9,7 @@
         border-radius: 16px;
         padding: 2rem;
         margin-bottom: 2rem;
-        box-shadow: var(--shadow-lg);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
     }
 
     .stats-summary {
@@ -46,7 +46,34 @@
         background: white;
         border-radius: 12px;
         margin-bottom: 2rem;
-        box-shadow: var(--shadow);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .filter-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #6b7280;
+    }
+
+    .filter-select {
+        padding: 0.75rem 1rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 1rem;
+        background: white;
+        transition: all 0.3s;
+    }
+
+    .filter-select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
 
     .results-grid {
@@ -58,22 +85,22 @@
         background: white;
         border-radius: 12px;
         padding: 1.5rem;
-        box-shadow: var(--shadow);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12);
         border-left: 4px solid transparent;
         transition: all 0.3s;
     }
 
     .result-card.correct {
-        border-left-color: var(--secondary);
+        border-left-color: #10b981;
     }
 
     .result-card.incorrect {
-        border-left-color: var(--danger);
+        border-left-color: #ef4444;
     }
 
     .result-card:hover {
         transform: translateX(5px);
-        box-shadow: var(--shadow-lg);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
     }
 
     .result-header {
@@ -116,7 +143,7 @@
     }
 
     .result-score {
-        background: var(--primary);
+        background: #3b82f6;
         color: white;
         padding: 0.5rem 1rem;
         border-radius: 8px;
@@ -128,7 +155,7 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
         padding-top: 1rem;
-        border-top: 1px solid var(--border);
+        border-top: 1px solid #e5e7eb;
     }
 
     .detail-group {
@@ -144,6 +171,24 @@
     .detail-value {
         font-weight: 600;
     }
+
+    .no-results {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+
+    @media (max-width: 768px) {
+        .stats-summary {
+            grid-template-columns: 1fr;
+        }
+        
+        .filters {
+            flex-direction: column;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -155,19 +200,19 @@
 
 <div class="stats-summary">
     <div class="summary-stat">
-        <div class="summary-value">{{ stats.total_bets }}</div>
+        <div class="summary-value">{{ stats.get('total_bets', 0) }}</div>
         <div class="summary-label">Gesamt Wetten</div>
     </div>
     <div class="summary-stat">
-        <div class="summary-value">{{ stats.correct_bets }}</div>
+        <div class="summary-value">{{ stats.get('correct_bets', 0) }}</div>
         <div class="summary-label">Richtige Vorhersagen</div>
     </div>
     <div class="summary-stat">
-        <div class="summary-value">{{ stats.accuracy }}%</div>
+        <div class="summary-value">{{ stats.get('accuracy', 0) }}%</div>
         <div class="summary-label">Genauigkeit</div>
     </div>
     <div class="summary-stat">
-        <div class="summary-value">{{ stats.roi }}%</div>
+        <div class="summary-value">{{ stats.get('roi', 0) }}%</div>
         <div class="summary-label">ROI</div>
     </div>
 </div>
@@ -178,7 +223,7 @@
         <select class="filter-select" id="leagueFilter">
             <option value="">Alle Ligen</option>
             {% for code, league in leagues.items() %}
-            <option value="{{ code }}" {% if filters.league == code %}selected{% endif %}>
+            <option value="{{ code }}" {% if filters and filters.get('league') == code %}selected{% endif %}>
                 {{ league.emoji }} {{ league.name }}
             </option>
             {% endfor %}
@@ -189,55 +234,61 @@
         <label class="filter-label">Zeitraum</label>
         <select class="filter-select" id="periodFilter">
             <option value="">Alle</option>
-            <option value="week" {% if filters.period == 'week' %}selected{% endif %}>Letzte Woche</option>
-            <option value="month" {% if filters.period == 'month' %}selected{% endif %}>Letzter Monat</option>
+            <option value="week" {% if filters and filters.get('period') == 'week' %}selected{% endif %}>Letzte Woche</option>
+            <option value="month" {% if filters and filters.get('period') == 'month' %}selected{% endif %}>Letzter Monat</option>
         </select>
     </div>
     
     <div class="filter-group">
-        <label class="filter-label">Nur richtige</label>
-        <input type="checkbox" id="correctOnly" {% if filters.correct_only %}checked{% endif %}>
+        <label class="filter-label">
+            <input type="checkbox" id="correctOnly" {% if filters and filters.get('correct_only') %}checked{% endif %}>
+            Nur richtige
+        </label>
     </div>
 </div>
 
 <div class="results-grid">
-    {% if results %}
+    {% if results and results|length > 0 %}
         {% for result in results %}
-        <div class="result-card {% if result.IsCorrect %}correct{% else %}incorrect{% endif %}">
+        <div class="result-card {% if result.get('IsCorrect') %}correct{% else %}incorrect{% endif %}">
             <div class="result-header">
                 <div class="result-date">
-                    {{ result.Date.strftime('%d.%m.%Y') }} - {{ result.Time }}
+                    {{ result.get('Date', 'N/A') }} - {{ result.get('Time', '15:30') }}
                 </div>
-                <div class="result-badge {% if result.IsCorrect %}badge-correct{% else %}badge-incorrect{% endif %}">
-                    {% if result.IsCorrect %}✓ Richtig{% else %}✗ Falsch{% endif %}
+                <div class="result-badge {% if result.get('IsCorrect') %}badge-correct{% else %}badge-incorrect{% endif %}">
+                    {% if result.get('IsCorrect') %}✓ Richtig{% else %}✗ Falsch{% endif %}
                 </div>
             </div>
             
             <div class="result-match">
-                <span>{{ result.HomeTeam }}</span>
-                <span class="result-score">{{ result.Score }}</span>
-                <span>{{ result.AwayTeam }}</span>
+                <span>{{ result.get('HomeTeam', 'Team A') }}</span>
+                <span class="result-score">{{ result.get('Score', '0-0') }}</span>
+                <span>{{ result.get('AwayTeam', 'Team B') }}</span>
             </div>
             
             <div class="result-details">
                 <div class="detail-group">
                     <span class="detail-label">Vorhersage:</span>
-                    <span class="detail-value">{{ result.FinalBet }}</span>
+                    <span class="detail-value">{{ result.get('FinalBet', result.get('Prediction', 'N/A')) }}</span>
                 </div>
                 <div class="detail-group">
                     <span class="detail-label">Ergebnis:</span>
                     <span class="detail-value">
-                        {% if result.Actual_Result == 'H' %}Heimsieg
-                        {% elif result.Actual_Result == 'D' %}Unentschieden
-                        {% else %}Auswärtssieg{% endif %}
+                        {% if result.get('Actual_Result') == 'H' %}Heimsieg
+                        {% elif result.get('Actual_Result') == 'D' %}Unentschieden
+                        {% elif result.get('Actual_Result') == 'A' %}Auswärtssieg
+                        {% else %}{{ result.get('Actual_Result', 'N/A') }}{% endif %}
                     </span>
                 </div>
             </div>
         </div>
         {% endfor %}
     {% else %}
-        <div class="no-predictions">
+        <div class="no-results">
             <h2>Keine Ergebnisse verfügbar</h2>
+            <p style="margin-top: 1rem; color: #6b7280;">
+                Ergebnisse werden täglich um 23:00 Uhr aktualisiert.
+            </p>
         </div>
     {% endif %}
 </div>
@@ -250,16 +301,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function applyFilters() {
         const params = new URLSearchParams();
-        if (leagueFilter.value) params.set('league', leagueFilter.value);
-        if (periodFilter.value) params.set('period', periodFilter.value);
-        if (correctOnly.checked) params.set('correct', 'true');
+        if (leagueFilter && leagueFilter.value) params.set('league', leagueFilter.value);
+        if (periodFilter && periodFilter.value) params.set('period', periodFilter.value);
+        if (correctOnly && correctOnly.checked) params.set('correct', 'true');
         
         window.location.href = '/results?' + params.toString();
     }
     
-    leagueFilter.addEventListener('change', applyFilters);
-    periodFilter.addEventListener('change', applyFilters);
-    correctOnly.addEventListener('change', applyFilters);
+    if (leagueFilter) leagueFilter.addEventListener('change', applyFilters);
+    if (periodFilter) periodFilter.addEventListener('change', applyFilters);
+    if (correctOnly) correctOnly.addEventListener('change', applyFilters);
 });
 </script>
 {% endblock %}
